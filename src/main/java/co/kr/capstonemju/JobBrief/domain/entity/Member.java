@@ -1,17 +1,13 @@
 package co.kr.capstonemju.JobBrief.domain.entity;
 
 //import co.kr.capstonemju.JobBrief.domain.Authority;
-import co.kr.capstonemju.JobBrief.dto.MemberDTO;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 @Entity
 @Getter
-@AllArgsConstructor
-@Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member extends BaseEntity  {
     @Id // pk 지정
@@ -31,4 +27,21 @@ public class Member extends BaseEntity  {
     @Column(name = "studentId", length = 10)
     private String studentId;
 
+    @Builder
+    public Member(String id, String name, String password, String phoneNumber, String email, String studentId){
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.studentId = studentId;
+    }
+
+    public Member updateMember(String name, String password, String phoneNumber, String email){
+        this.name = name;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        return this;
+    }
 }
