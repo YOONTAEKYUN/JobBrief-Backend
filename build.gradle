@@ -19,11 +19,13 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.4'
 	implementation'org.springframework.boot:spring-boot-starter-validation'
 
-	annotationProcessor'org.projectlombok:lombok:1.18.26'
-	testAnnotationProcessor'org.projectlombok:lombok:1.18.26'
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.4'
+
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor'org.projectlombok:lombok:1.18.26'
+	testAnnotationProcessor'org.projectlombok:lombok:1.18.26'
 
 	//Jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -32,18 +34,21 @@ dependencies {
 	//Swagger springdoc
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
 
-//	// SpringSecurity
-//	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//
+	// SpringSecurity
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 	//JWT
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	//com.sun.xml.bind
-	implementation 'com.sun.xml.bind:jaxb1-impl:2.2.5.1'
-	implementation 'com.sun.xml.bind:jaxb-core:4.0.2'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+
 	//javax.xml.bind
 	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 
+	//com.sun.xml.bind
+	implementation 'com.sun.xml.bind:jaxb1-impl:2.2.5.1'
+	implementation 'com.sun.xml.bind:jaxb-core:4.0.2'
 
 	//thymeleaf : cannot resolve mvc 에러 메세지 해결 디펜던시 겸 타임리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.0.4'
