@@ -13,8 +13,8 @@
  
 # IntelliJ project files
 .idea
-.idea/**
-.gradle/**
+.idea/
+.gradle/
 .idea/*.xml
 *.iml
 out
