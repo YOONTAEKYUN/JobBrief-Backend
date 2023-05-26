@@ -20,11 +20,6 @@ public class AuthController {
     private final long COOKIE_EXPIRATION = 7776000; // 90일
 
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
-
     @PostMapping("/login")
     public LoginResponse login(@RequestBody @Valid LoginRequest loginRequest) {
         // User 등록 및 Refresh Token 저장
@@ -86,9 +81,5 @@ public class AuthController {
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .build();
-    }
-    @GetMapping("/logout")
-    public String mainForm(){
-        return "main";
     }
 }

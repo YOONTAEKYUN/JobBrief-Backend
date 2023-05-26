@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 public class PrincipalDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     @Override
-    public PrincipalDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        Member findUser = memberRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 id를 가진 회원을 찾을 수 없습니다 -> " + id));
+    public PrincipalDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        Member findUser = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 id를 가진 회원을 찾을 수 없습니다 -> " + userId));
 
         if(findUser != null){
             PrincipalDetails principalDetails = new PrincipalDetails(findUser);
