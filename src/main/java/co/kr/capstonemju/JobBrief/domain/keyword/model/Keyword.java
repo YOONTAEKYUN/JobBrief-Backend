@@ -9,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor
 @Table(name = "keyword")
 public class Keyword {
@@ -19,10 +17,9 @@ public class Keyword {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "keyword")
-    private String keyword;
+    @Column(name = "keyword_name")
+    private String keywordName;
 
     @ManyToMany(mappedBy = "keywords")
     private List<News> newsList = new ArrayList<>();
-
 }

@@ -18,7 +18,7 @@ public class Member extends BaseEntity {
     @Column(name = "id")
     private Long id;
     @NotNull
-    @Column(name = "userId",unique = true, length = 100) // unique 제약조건 추가
+    @Column(name = "user_id",unique = true, length = 100) // unique 제약조건 추가
     private String userId;
     @NotNull
     @Column(name = "name", length = 20)
@@ -30,12 +30,10 @@ public class Member extends BaseEntity {
     @Email
     @Column(name = "email", length = 100)
     private String email;
-    @Column(name = "phoneNumber",length = 20)
+    @Column(name = "phone_number",length = 20)
     private String phoneNumber;
-
-    @Column(name = "studentId", length = 10)
+    @Column(name = "student_id", length = 10)
     private String studentId;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

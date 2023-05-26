@@ -4,11 +4,12 @@ import co.kr.capstonemju.JobBrief.domain.member.model.Member;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor
 @Table(name = "bookmark")
 public class Bookmark {
@@ -24,4 +25,9 @@ public class Bookmark {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @CreatedDate
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
+
 }
