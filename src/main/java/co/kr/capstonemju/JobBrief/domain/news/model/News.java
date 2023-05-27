@@ -30,7 +30,7 @@ public class News {
     @Column(name = "pub_date",nullable = false)
     private LocalDateTime pub_date;
 
-    @Column(name = "content",nullable = false)
+    @Column(name = "content",nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "summary",nullable = false)
