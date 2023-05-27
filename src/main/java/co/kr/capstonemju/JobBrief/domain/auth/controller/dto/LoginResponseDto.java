@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LoginResponse {
+public class LoginResponseDto {
     private String tokenType;
     private String accessToken;
     private String refreshToken;
 
-    public LoginResponse(String tokenType, String accessToken,String refreshToken) {
+    public LoginResponseDto(String tokenType, String accessToken, String refreshToken) {
         this.tokenType = tokenType;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

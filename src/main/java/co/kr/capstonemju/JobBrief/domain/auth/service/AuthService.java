@@ -1,8 +1,8 @@
 package co.kr.capstonemju.JobBrief.domain.auth.service;
 
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginResponse;
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.TokenDTO;
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginRequest;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginResponseDto;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.TokenDto;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginRequestDto;
 import co.kr.capstonemju.JobBrief.domain.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,14 +30,14 @@ public class AuthService {
 
     // 로그인: 인증 정보 저장 및 비어 토큰 발급
     @Transactional
-    public LoginResponse login(LoginRequest loginRequest) {
+    public LoginResponseDto login(LoginRequestDto loginRequest) {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getId(),loginRequest.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        TokenDTO tokenDTO = generateToken(SERVER,authentication.getName(),getAuthorities(authentication));
-        return new LoginResponse(TOKEN_TYPE, tokenDTO.getAccessToken(), tokenDTO.getRefreshToken());
+        TokenDto tokenDTO = generateToken(SERVER,authentication.getName(),getAuthorities(authentication));
+        return new LoginResponseDto(TOKEN_TYPE, tokenDTO.getAccessToken(), tokenDTO.getRefreshToken());
     }
     // AT가 만료일자만 초과한 유효한 토큰인지 검사
     public boolean validate(String requestAccessTokenInHeader) {
@@ -46,7 +46,7 @@ public class AuthService {
     }
     // 토큰 재발급: validate 메서드가 true 반환할 때만 사용 -> AT, RT 재발급
     @Transactional
-    public TokenDTO reissue(String requestAccessTokenInHeader, String requestRefreshToken) {
+    public TokenDto reissue(String requestAccessTokenInHeader, String requestRefreshToken) {
         String requestAccessToken = resolveToken(requestAccessTokenInHeader);
 
         Authentication authentication = jwtProvider.getAuthentication(requestAccessToken);
@@ -68,20 +68,20 @@ public class AuthService {
 
         // 토큰 재발급 및 Redis 업데이트
         redisService.deleteValues("RT(" + SERVER + "):" + principal); // 기존 RT 삭제
-        TokenDTO tokenDto = jwtProvider.createToken(principal, authorities);
+        TokenDto tokenDto = jwtProvider.createToken(principal, authorities);
         saveRefreshToken(SERVER, principal, tokenDto.getRefreshToken());
         return tokenDto;
     }
     // 토큰 발급
     @Transactional
-    public TokenDTO generateToken(String provider, String id, String authorities) {
+    public TokenDto generateToken(String provider, String id, String authorities) {
         // RT가 이미 있을 경우
         if(redisService.getValues("RT(" + provider + "):" + id) != null) {
             redisService.deleteValues("RT(" + provider + "):" + id); // 삭제
         }
 
         // AT, RT 생성 및 Redis에 RT 저장
-        TokenDTO tokenDto =  jwtProvider.createToken(id, authorities);
+        TokenDto tokenDto =  jwtProvider.createToken(id, authorities);
         saveRefreshToken(provider, id, tokenDto.getRefreshToken());
         return tokenDto;
     }
