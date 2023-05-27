@@ -15,4 +15,9 @@ public class NewsController {
     public NewsListDto getNewsList(@RequestParam String job){
         return newsService.getNewsList(job);
     }
+
+    @GetMapping("/search")
+    public NewsListDto searchNewsList(@RequestParam String type, String keyword){
+        return newsService.searchNewsList(type, keyword);
+    }
 }

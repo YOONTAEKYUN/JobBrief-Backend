@@ -34,4 +34,17 @@ public class NewsService {
         List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
         return new NewsListDto(newsDtoList);
     }
+
+    public NewsListDto searchNewsList(String type, String keyword) {
+        List<News> newsList = new ArrayList<>();
+        switch (type) {
+            case "title"-> newsList = newsRepository.findByTitleContaining(keyword);
+            case "reporter" -> newsList = newsRepository.findByReporterContaining(keyword);
+            case "content" -> newsList = newsRepository.findByContentContaining(keyword);
+            case "press" -> newsList = newsRepository.findByPressContaining(keyword);
+            default -> System.out.println("type에 올바르지 않은 값이 들어왔습니다.");
+        }
+        List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
+        return new NewsListDto(newsDtoList);
+    }
 }
