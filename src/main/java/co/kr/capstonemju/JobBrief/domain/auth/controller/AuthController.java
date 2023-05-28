@@ -1,8 +1,8 @@
 package co.kr.capstonemju.JobBrief.domain.auth.controller;
 
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginRequest;
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginResponse;
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.TokenDTO;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginRequestDto;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.LoginResponseDto;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.TokenDto;
 import co.kr.capstonemju.JobBrief.domain.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,8 @@ public class AuthController {
     private final long COOKIE_EXPIRATION = 7776000; // 90일
 
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
-
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody @Valid LoginRequest loginRequest) {
+    public LoginResponseDto login(@RequestBody @Valid LoginRequestDto loginRequest) {
         // User 등록 및 Refresh Token 저장
         return authService.login(loginRequest);
     }
@@ -44,7 +39,7 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@CookieValue(name = "refresh-token") String requestRefreshToken,
                                      @RequestHeader("Authorization") String requestAccessToken) {
-        TokenDTO reissuedTokenDto = authService.reissue(requestAccessToken, requestRefreshToken);
+        TokenDto reissuedTokenDto = authService.reissue(requestAccessToken, requestRefreshToken);
 
         if (reissuedTokenDto != null) { // 토큰 재발급 성공
             // RT 저장
@@ -86,9 +81,5 @@ public class AuthController {
                 .status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
                 .build();
-    }
-    @GetMapping("/logout")
-    public String mainForm(){
-        return "main";
     }
 }

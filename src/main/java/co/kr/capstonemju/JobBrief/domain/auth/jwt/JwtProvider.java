@@ -1,7 +1,7 @@
 package co.kr.capstonemju.JobBrief.domain.auth.jwt;
 
 
-import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.TokenDTO;
+import co.kr.capstonemju.JobBrief.domain.auth.controller.dto.TokenDto;
 import co.kr.capstonemju.JobBrief.domain.auth.model.PrincipalDetails;
 import co.kr.capstonemju.JobBrief.domain.auth.service.PrincipalDetailsService;
 import co.kr.capstonemju.JobBrief.domain.auth.service.RedisService;
@@ -58,7 +58,7 @@ public class JwtProvider implements InitializingBean {
     }
 
     @Transactional
-    public TokenDTO createToken(String id, String authorities){
+    public TokenDto createToken(String id, String authorities){
         Long now = System.currentTimeMillis();
 
         String accessToken = Jwts.builder()
@@ -80,7 +80,7 @@ public class JwtProvider implements InitializingBean {
                 .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
 
-        return new TokenDTO(accessToken, refreshToken);
+        return new TokenDto(accessToken, refreshToken);
     }
 
     // == 토큰으로부터 정보 추출 == //
