@@ -1,13 +1,20 @@
 package co.kr.capstonemju.JobBrief.domain.news.service;
 
+import co.kr.capstonemju.JobBrief.domain.member.model.Member;
+import co.kr.capstonemju.JobBrief.domain.member.model.Role;
+import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDetailDto;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDto;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
 import co.kr.capstonemju.JobBrief.domain.news.model.Job;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import co.kr.capstonemju.JobBrief.domain.news.repository.NewsRepository;
+import co.kr.capstonemju.JobBrief.domain.scrap.model.Scrap;
+import co.kr.capstonemju.JobBrief.domain.scrap.repository.ScrapRepository;
+import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +24,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class NewsService {
     private final NewsRepository newsRepository;
+
+    private final ScrapRepository scrapRepository;
 
     public NewsListDto getNewsList(String job) {
         List<News> newsList = new ArrayList<>();
@@ -47,4 +56,27 @@ public class NewsService {
         List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
         return new NewsListDto(newsDtoList);
     }
+
+    public NewsDetailDto getNewsDetail(Long id, @CurrentUser Member member) {
+        boolean isScraped = false;
+        NewsDetailDto newsDetailDTO = new NewsDetailDto();
+        News news =newsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("News Not Found"));
+
+        if(member != null){
+            boolean isMember = member.getRole().equals(Role.MEMBER);
+            if (isMember){
+                Scrap scrap = scrapRepository.findByNewsAndMember(news, member);
+                if (scrap != null) {
+                    isScraped = true;
+                }//회원인데 해당 기사에 대해 스크랩이 없는 경우, ""
+                String scrap_opinion = isScraped ? scrap.getOpinion() : "";
+                newsDetailDTO = new NewsDetailDto(news, scrap_opinion);
+            }else {//비회원인 경우, 스크랩 내용은 null 로 보냄
+                newsDetailDTO = new NewsDetailDto(news, null);
+            }
+        }
+        return newsDetailDTO;
+    }
+
 }
