@@ -45,9 +45,10 @@ public class SecurityConfig {
             .authorizeHttpRequests()
             .requestMatchers(
                     API_PREFIX+"/member/join",
-                    API_PREFIX+"/auth/login"
+                    API_PREFIX+"/auth/login",
+                    API_PREFIX+"/news/**"
             ).permitAll()
-            .requestMatchers(API_PREFIX+"/collection/**").hasRole("MEMBER")
+            .anyRequest().authenticated()
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

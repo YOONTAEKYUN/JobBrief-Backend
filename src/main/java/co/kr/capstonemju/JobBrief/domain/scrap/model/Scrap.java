@@ -17,13 +17,25 @@ public class Scrap extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "news_id", unique = true)
+    @JoinColumn(name = "news_id")
     private News news;
 
     @ManyToOne
-    @JoinColumn(name = "member_id", unique = true)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Column(name = "opinion")
     private String opinion;
+
+    @Builder
+    private Scrap(News news, Member member, String opinion){
+        this.news = news;
+        this.member = member;
+        this.opinion = opinion;
+    }
+
+    public void updateScrap(String opinion){
+        this.opinion = opinion;
+    }
+
 }
