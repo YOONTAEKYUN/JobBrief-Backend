@@ -17,9 +17,10 @@ public class NewsDetailDto {
     private String content;
     private String summary;
     private String scrap_opinion;
+    private boolean isMember;
 
 
-    public NewsDetailDto(News news, String scrap_opinion) {
+    public NewsDetailDto(News news, String scrap_opinion, boolean isMember) {
         this.id = news.getId();
         this.title = news.getTitle();
         this.press = news.getPress();
@@ -28,5 +29,6 @@ public class NewsDetailDto {
         this.content = news.getContent();
         this.summary = news.getSummary();
         this.scrap_opinion = scrap_opinion;
+        this.isMember = isMember;
     }
 }

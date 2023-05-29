@@ -71,9 +71,9 @@ public class NewsService {
                     isScraped = true;
                 }//회원인데 해당 기사에 대해 스크랩이 없는 경우, ""
                 String scrap_opinion = isScraped ? scrap.getOpinion() : "";
-                newsDetailDTO = new NewsDetailDto(news, scrap_opinion);
+                newsDetailDTO = new NewsDetailDto(news, scrap_opinion, true);
             }else {//비회원인 경우, 스크랩 내용은 null 로 보냄
-                newsDetailDTO = new NewsDetailDto(news, null);
+                newsDetailDTO = new NewsDetailDto(news, null, false);
             }
         }
         return newsDetailDTO;
