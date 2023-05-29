@@ -2,27 +2,21 @@ package co.kr.capstonemju.JobBrief.domain.auth.service;
 
 import co.kr.capstonemju.JobBrief.domain.auth.model.PrincipalDetails;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
-import co.kr.capstonemju.JobBrief.domain.member.repository.MemberRepository;
+import co.kr.capstonemju.JobBrief.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     @Override
-    public PrincipalDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        Member findUser = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 id를 가진 회원을 찾을 수 없습니다 -> " + userId));
-
-        if(findUser != null){
-            PrincipalDetails principalDetails = new PrincipalDetails(findUser);
-            return  principalDetails;
-        }
-
-        return null;
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberService.findByUserId(username);
+        return new PrincipalDetails(member);
     }
-
 }
+

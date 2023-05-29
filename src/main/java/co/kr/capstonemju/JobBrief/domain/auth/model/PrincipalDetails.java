@@ -1,21 +1,31 @@
 package co.kr.capstonemju.JobBrief.domain.auth.model;
 
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
 public class PrincipalDetails implements UserDetails {
     private final Member member;
-    public PrincipalDetails(Member member){this.member = member;}
+
+    public PrincipalDetails(Member member) {
+        this.member = member;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> member.getRole().getAuthority()); // key: ROLE_권한
+        authorities.add(()-> member.getRole().getAuthority());
         return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return member.getPassword();
     }
 
     @Override
@@ -24,30 +34,22 @@ public class PrincipalDetails implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return member.getPassword();
-    }
-
-
-    // == 세부 설정 == //
-
-    @Override
-    public boolean isAccountNonExpired() { // 계정의 만료 여부
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() { // 계정의 잠김 여부
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() { // 비밀번호 만료 여부
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() { // 계정의 활성화 여부
+    public boolean isEnabled() {
         return true;
     }
 }
