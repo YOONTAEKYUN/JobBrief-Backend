@@ -59,8 +59,7 @@ public class NewsService {
     public NewsDetailDto getNewsDetail(Long newsId){
         News news =newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
-        NewsDetailDto newsDetailDTO = new NewsDetailDto(news, null, false);
-        return newsDetailDTO;
+        return new NewsDetailDto(news, null, false);
     }
     public NewsDetailDto getNewsDetailForMember(Long newsId, @CurrentUser Member member) {
         boolean isScraped = false;
