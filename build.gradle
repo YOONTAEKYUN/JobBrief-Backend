@@ -18,6 +18,8 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.0.4'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.4'
 	implementation'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'com.auth0:java-jwt:4.4.0'
+
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.4'

@@ -19,4 +19,9 @@ public class MemberService {
                         });
         memberRepository.save(member);
     }
+
+    public Member findByUserId(String userId) {
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(()-> new IllegalArgumentException(""));
+    }
 }

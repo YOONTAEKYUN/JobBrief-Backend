@@ -4,13 +4,17 @@ import co.kr.capstonemju.JobBrief.domain.auth.jwt.JwtProvider;
 import co.kr.capstonemju.JobBrief.domain.auth.exception.JwtAccessDeniedHandler;
 import co.kr.capstonemju.JobBrief.domain.auth.exception.JwtAuthenticationEntryPoint;
 import co.kr.capstonemju.JobBrief.domain.auth.jwt.JwtFilter;
+import co.kr.capstonemju.JobBrief.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -18,9 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private static final String API_PREFIX = "/api";
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtProvider jwtProvider;
+
+    private final MemberService memberService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -35,14 +43,39 @@ public class SecurityConfig {
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
             .authorizeHttpRequests()
-            .requestMatchers("/api/member/join","/api/auth/login","/api/news/**").permitAll()
-            .requestMatchers(HttpMethod.GET,"/api/collection/**").hasRole("MEMBER")
+            .requestMatchers(
+                    API_PREFIX+"/member/join",
+                    API_PREFIX+"/auth/login",
+                    API_PREFIX+"/news/",
+                    API_PREFIX+"/news/search",
+                    API_PREFIX+"/news/{id}"
+            ).permitAll()
+            .anyRequest().authenticated()
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .addFilterBefore(new JwtFilter(jwtProvider),UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter(),UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public JwtFilter jwtAuthFilter() {
+        return new JwtFilter(jwtProvider, memberService);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
+
+
 
