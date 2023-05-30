@@ -1,6 +1,7 @@
 package co.kr.capstonemju.JobBrief.domain.scrap.controller;
 
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
+import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
 import co.kr.capstonemju.JobBrief.domain.scrap.controller.dto.ScrapCreateRequest;
 import co.kr.capstonemju.JobBrief.domain.scrap.service.ScrapService;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
@@ -19,6 +20,12 @@ public class ScrapController {
     @PreAuthorize("hasRole('MEMBER')")
     public void saveScrap (@CurrentUser Member member, @PathVariable Long id, @RequestBody @Valid ScrapCreateRequest scrapCreateRequest){
         scrapService.saveScrap(member, id, scrapCreateRequest);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('MEMBER')")
+    public NewsListDto getAllScrap(@CurrentUser Member member){
+        return scrapService.getAllScrap(member);
     }
 
 }
