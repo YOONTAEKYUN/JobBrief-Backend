@@ -30,4 +30,9 @@ public class Bookmark {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    @Builder
+    public Bookmark(News news, Member member) {
+        this.news = news;
+        this.member = member;
+    }
 }
