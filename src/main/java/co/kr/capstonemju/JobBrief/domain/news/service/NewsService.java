@@ -56,15 +56,15 @@ public class NewsService {
         List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
         return new NewsListDto(newsDtoList);
     }
-    public NewsDetailDto getNewsDetail(Long id){
-        News news =newsRepository.findById(id)
+    public NewsDetailDto getNewsDetail(Long newsId){
+        News news =newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
         NewsDetailDto newsDetailDTO = new NewsDetailDto(news, null, false);
         return newsDetailDTO;
     }
-    public NewsDetailDto getNewsDetailForMember(Long id, @CurrentUser Member member) {
+    public NewsDetailDto getNewsDetailForMember(Long newsId, @CurrentUser Member member) {
         boolean isScraped = false;
-        News news =newsRepository.findById(id)
+        News news =newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
         NewsDetailDto newsDetailDTO = new NewsDetailDto();
         if(member != null){

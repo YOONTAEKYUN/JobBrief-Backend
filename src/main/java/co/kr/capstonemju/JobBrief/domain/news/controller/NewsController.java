@@ -24,13 +24,13 @@ public class NewsController {
     public NewsListDto searchNewsList(@RequestParam String type, String keyword){
         return newsService.searchNewsList(type, keyword);
     }
-    @GetMapping("/{id}")
-    public NewsDetailDto getNewsDetail(@PathVariable Long id){
-        return newsService.getNewsDetail(id);
+    @GetMapping("/{newsId}")
+    public NewsDetailDto getNewsDetail(@PathVariable Long newsId){
+        return newsService.getNewsDetail(newsId);
     }
-    @GetMapping("/member/{id}")
+    @GetMapping("/member/{newsId}")
     @PreAuthorize("hasRole('MEMBER')")
-    public NewsDetailDto getNewsDetailForMember(@PathVariable Long id, @CurrentUser Member member){
-        return newsService.getNewsDetailForMember(id, member);
+    public NewsDetailDto getNewsDetailForMember(@PathVariable Long newsId, @CurrentUser Member member){
+        return newsService.getNewsDetailForMember(newsId, member);
     }
 }
