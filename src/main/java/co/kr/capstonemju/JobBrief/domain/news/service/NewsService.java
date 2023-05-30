@@ -56,13 +56,17 @@ public class NewsService {
         List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
         return new NewsListDto(newsDtoList);
     }
-
-    public NewsDetailDto getNewsDetail(Long id, @CurrentUser Member member) {
-        boolean isScraped = false;
-        NewsDetailDto newsDetailDTO = new NewsDetailDto();
+    public NewsDetailDto getNewsDetail(Long id){
         News news =newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
-
+        NewsDetailDto newsDetailDTO = new NewsDetailDto(news, null, false);
+        return newsDetailDTO;
+    }
+    public NewsDetailDto getNewsDetailForMember(Long id, @CurrentUser Member member) {
+        boolean isScraped = false;
+        News news =newsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("News Not Found"));
+        NewsDetailDto newsDetailDTO = new NewsDetailDto();
         if(member != null){
             boolean isMember = member.getRole().equals(Role.MEMBER);
             if (isMember){
@@ -72,9 +76,9 @@ public class NewsService {
                 }//회원인데 해당 기사에 대해 스크랩이 없는 경우, ""
                 String scrap_opinion = isScraped ? scrap.getOpinion() : "";
                 newsDetailDTO = new NewsDetailDto(news, scrap_opinion, true);
-            }else {//비회원인 경우, 스크랩 내용은 null 로 보냄
-                newsDetailDTO = new NewsDetailDto(news, null, false);
             }
+        }else {
+            System.out.println("wrong access!");
         }
         return newsDetailDTO;
     }

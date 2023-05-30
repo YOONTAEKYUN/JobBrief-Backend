@@ -6,6 +6,7 @@ import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
 import co.kr.capstonemju.JobBrief.domain.news.service.NewsService;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,9 +24,13 @@ public class NewsController {
     public NewsListDto searchNewsList(@RequestParam String type, String keyword){
         return newsService.searchNewsList(type, keyword);
     }
-
     @GetMapping("/{id}")
-    public NewsDetailDto getNewsDetail(@PathVariable Long id, @CurrentUser Member member){
-        return newsService.getNewsDetail(id, member);
+    public NewsDetailDto getNewsDetail(@PathVariable Long id){
+        return newsService.getNewsDetail(id);
+    }
+    @GetMapping("/member/{id}")
+    @PreAuthorize("hasRole('MEMBER')")
+    public NewsDetailDto getNewsDetailForMember(@PathVariable Long id, @CurrentUser Member member){
+        return newsService.getNewsDetailForMember(id, member);
     }
 }
