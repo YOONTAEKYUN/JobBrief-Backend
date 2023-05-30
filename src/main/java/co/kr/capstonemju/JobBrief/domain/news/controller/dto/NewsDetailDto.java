@@ -1,12 +1,17 @@
 package co.kr.capstonemju.JobBrief.domain.news.controller.dto;
 
+import co.kr.capstonemju.JobBrief.domain.keyword.controlloer.dto.KeywordDto;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class NewsDetailDto {
     private Long id;
@@ -18,7 +23,7 @@ public class NewsDetailDto {
     private String summary;
     private String scrap_opinion;
     private boolean isMember;
-
+    private List<KeywordDto> keywords;
 
     public NewsDetailDto(News news, String scrap_opinion, boolean isMember) {
         this.id = news.getId();
@@ -30,5 +35,8 @@ public class NewsDetailDto {
         this.summary = news.getSummary();
         this.scrap_opinion = scrap_opinion;
         this.isMember = isMember;
+        this.keywords = news.getKeywords().stream()
+                .map(keyword -> new KeywordDto(keyword.getKeywordName()))
+                .collect(Collectors.toList());
     }
 }
