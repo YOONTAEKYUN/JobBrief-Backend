@@ -46,7 +46,7 @@ public class SecurityConfig {
             .requestMatchers(
                     API_PREFIX+"/member/join",
                     API_PREFIX+"/auth/login",
-                    API_PREFIX+"/news/",
+                    API_PREFIX+"/news",
                     API_PREFIX+"/news/search",
                     API_PREFIX+"/news/{id}"
             ).permitAll()
