@@ -7,7 +7,9 @@ import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDto;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
 import co.kr.capstonemju.JobBrief.domain.news.model.Job;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
+import co.kr.capstonemju.JobBrief.domain.recentNews.model.RecentNews;
 import co.kr.capstonemju.JobBrief.domain.news.repository.NewsRepository;
+import co.kr.capstonemju.JobBrief.domain.recentNews.service.RecentNewsService;
 import co.kr.capstonemju.JobBrief.domain.scrap.model.Scrap;
 import co.kr.capstonemju.JobBrief.domain.scrap.repository.ScrapRepository;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
@@ -16,15 +18,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class NewsService {
     private final NewsRepository newsRepository;
-
+    private final RecentNewsService recentNewsService;
     private final ScrapRepository scrapRepository;
 
     public NewsListDto getNewsList(String job) {
@@ -65,6 +68,13 @@ public class NewsService {
         boolean isScraped = false;
         News news =newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
+
+        RecentNews recentNews = new RecentNews();
+        recentNews.setMember(member);
+        recentNews.setNews(news);
+        recentNews.setViewedAt(LocalDateTime.now());
+        recentNewsService.saveRecentNews(recentNews);
+
         NewsDetailDto newsDetailDTO = new NewsDetailDto();
         if(member != null){
             boolean isMember = member.getRole().equals(Role.MEMBER);
@@ -81,5 +91,4 @@ public class NewsService {
         }
         return newsDetailDTO;
     }
-
 }
