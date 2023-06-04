@@ -18,7 +18,7 @@ public class BookmarkController {
     @PostMapping("/")
     @PreAuthorize("hasRole('MEMBER')")
     public void addBookmark(@RequestBody BookmarkDto bookmarkDto, @CurrentUser Member member) {
-        bookmarkService.addBookmark(bookmarkDto, member);
+        bookmarkService.clickBookmark(bookmarkDto, member);
     }
 
     @GetMapping("/all")

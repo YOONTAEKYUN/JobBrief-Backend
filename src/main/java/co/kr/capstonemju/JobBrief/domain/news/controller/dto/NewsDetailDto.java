@@ -4,14 +4,12 @@ import co.kr.capstonemju.JobBrief.domain.keyword.controlloer.dto.KeywordDto;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class NewsDetailDto {
     private Long id;

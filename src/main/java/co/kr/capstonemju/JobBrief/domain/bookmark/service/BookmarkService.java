@@ -23,12 +23,19 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final NewsRepository newsRepository;
 
-    public void addBookmark(BookmarkDto bookmarkDto, @CurrentUser Member member){
+    public void clickBookmark(BookmarkDto bookmarkDto, @CurrentUser Member member){
         News news = newsRepository.findById(bookmarkDto.getNewsId())
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
 
-        Bookmark bookmark = new Bookmark(news, member);
-        bookmarkRepository.save(bookmark);
+        Bookmark existingBookmark = bookmarkRepository.findByNewsAndMember(news, member);
+        if (existingBookmark != null) {
+            // 이미 북마크된 경우, 삭제 처리
+            bookmarkRepository.delete(existingBookmark);
+        } else {
+            // 북마크 추가
+            Bookmark bookmark = new Bookmark(news, member);
+            bookmarkRepository.save(bookmark);
+        }
     }
 
     public NewsListDto getBookmarkList(Member member) {
