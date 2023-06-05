@@ -45,4 +45,13 @@ public class Member extends BaseEntity {
         this.studentId = studentId;
         this.role = role;
     }
+
+    public void updateMemberInfo(String userId, String name, String password, String phoneNumber, String email){
+        this.userId = userId;
+        this.name = name;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+
+    }
 }
