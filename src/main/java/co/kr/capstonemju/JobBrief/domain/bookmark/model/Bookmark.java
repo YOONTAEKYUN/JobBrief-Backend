@@ -4,7 +4,6 @@ import co.kr.capstonemju.JobBrief.domain.member.model.Member;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -26,13 +25,13 @@ public class Bookmark {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @CreatedDate
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
     @Builder
-    public Bookmark(News news, Member member) {
+    public Bookmark(News news, Member member, LocalDateTime createAt) {
         this.news = news;
         this.member = member;
+        this.createAt = createAt;
     }
 }
