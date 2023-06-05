@@ -11,10 +11,11 @@ import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import co.kr.capstonemju.JobBrief.domain.news.repository.NewsRepository;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,8 +23,10 @@ import java.util.List;
 public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final NewsRepository newsRepository;
+    private static final int PAGE_SIZE = 10;
 
-    public void clickBookmark(BookmarkDto bookmarkDto, @CurrentUser Member member){
+
+    public void clickBookmark(BookmarkDto bookmarkDto, @CurrentUser Member member) {
         News news = newsRepository.findById(bookmarkDto.getNewsId())
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
 
@@ -38,15 +41,13 @@ public class BookmarkService {
         }
     }
 
-    public NewsListDto getBookmarkList(Member member) {
-        List<Bookmark> bookmarkList = bookmarkRepository.findByMember(member);
-        List<News> newsList = new ArrayList<>();
-
-        for (Bookmark bookmark : bookmarkList) {
-            newsList.add(bookmark.getNews());
-        }
+    public NewsListDto getBookmarkList(Member member, int page) {
+        PageRequest pageRequest = PageRequest.of(page - 1, PAGE_SIZE);
+        List<Bookmark> bookmarkList = bookmarkRepository.findByMember(member, pageRequest);
+        List<News> newsList = bookmarkList.stream().map(Bookmark::getNews).toList();
         List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
-
-        return new NewsListDto(newsDtoList);
+        long totalItems = bookmarkRepository.countByMember(member);
+        int totalPages = (int) Math.ceil((double) totalItems / PAGE_SIZE);
+        return new NewsListDto(newsDtoList, page, totalPages);
     }
 }

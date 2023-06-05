@@ -16,13 +16,13 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping
-    public NewsListDto getNewsList(@RequestParam String job){
-        return newsService.getNewsList(job);
+    public NewsListDto getNewsList(@RequestParam String job, @RequestParam(defaultValue = "1") int page){
+        return newsService.getNewsList(job, page);
     }
 
     @GetMapping("/search")
-    public NewsListDto searchNewsList(@RequestParam String type, String keyword){
-        return newsService.searchNewsList(type, keyword);
+    public NewsListDto searchNewsList(@RequestParam String type, String keyword, @RequestParam(defaultValue = "1") int page){
+        return newsService.searchNewsList(type, keyword, page);
     }
     @GetMapping("/{newsId}")
     public NewsDetailDto getNewsDetail(@PathVariable Long newsId){

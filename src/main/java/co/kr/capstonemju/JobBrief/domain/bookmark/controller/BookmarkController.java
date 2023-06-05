@@ -23,8 +23,8 @@ public class BookmarkController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('MEMBER')")
-    public NewsListDto getBookmarkList(@CurrentUser Member member){
-        return bookmarkService.getBookmarkList(member);
+    public NewsListDto getBookmarkList(@CurrentUser Member member,@RequestParam(defaultValue = "1") int page){
+        return bookmarkService.getBookmarkList(member, page);
     }
 
 

@@ -14,6 +14,9 @@ import co.kr.capstonemju.JobBrief.domain.scrap.model.Scrap;
 import co.kr.capstonemju.JobBrief.domain.scrap.repository.ScrapRepository;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -29,25 +32,29 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final RecentNewsService recentNewsService;
     private final ScrapRepository scrapRepository;
+    private static final int PAGE_SIZE = 10;
 
-    public NewsListDto getNewsList(String job) {
-        List<News> newsList = new ArrayList<>();
+    public NewsListDto getNewsList(String job, int page) {
+        PageRequest pageRequest = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("pub_date").descending());
+        Page<News> newsPage = null;
         switch (job) {
-            case "all"-> newsList = newsRepository.findAllByOrderByPub_dateDesc();
-            case "production-quality" -> newsList = newsRepository.findByJob(Job.PRODUCTION_QUALITY);
-            case "it-developer" -> newsList = newsRepository.findByJob(Job.IT_DEVELOPMENT);
-            case "human-affairs" -> newsList = newsRepository.findByJob(Job.HUMAN_AFFAIRS);
-            case "finance-accounting" -> newsList = newsRepository.findByJob(Job.FINANCE_ACCOUNTING);
-            case "strategy-planning" -> newsList = newsRepository.findByJob(Job.STRATEGY_PLANNING);
-            case "sales-management" -> newsList = newsRepository.findByJob(Job.SALES_MANAGEMENT);
-            case "marketing-merchandiser" -> newsList = newsRepository.findByJob(Job.MARKETING_MERCHANDISER);
+            case "all"-> newsPage = newsRepository.findAllByOrderByPub_dateDesc(pageRequest);
+            case "production-quality" -> newsPage = newsRepository.findByJob(Job.PRODUCTION_QUALITY, pageRequest);
+            case "it-developer" -> newsPage = newsRepository.findByJob(Job.IT_DEVELOPMENT, pageRequest);
+            case "human-affairs" -> newsPage = newsRepository.findByJob(Job.HUMAN_AFFAIRS, pageRequest);
+            case "finance-accounting" -> newsPage = newsRepository.findByJob(Job.FINANCE_ACCOUNTING, pageRequest);
+            case "strategy-planning" -> newsPage = newsRepository.findByJob(Job.STRATEGY_PLANNING, pageRequest);
+            case "sales-management" -> newsPage = newsRepository.findByJob(Job.SALES_MANAGEMENT, pageRequest);
+            case "marketing-merchandiser" -> newsPage = newsRepository.findByJob(Job.MARKETING_MERCHANDISER, pageRequest);
             default -> System.out.println("올바르지 않은 값이 들어왔습니다");
         }
-        List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
-        return new NewsListDto(newsDtoList);
+
+        List<NewsDto> newsDtoList = newsPage.getContent().stream().map(NewsDto::new).toList();
+        int totalPages = newsPage.getTotalPages();
+        return new NewsListDto(newsDtoList, page, totalPages);
     }
 
-    public NewsListDto searchNewsList(String type, String keyword) {
+    public NewsListDto searchNewsList(String type, String keyword, int page) {
         List<News> newsList = new ArrayList<>();
         switch (type) {
             case "title"-> newsList = newsRepository.findByTitleContaining(keyword);
@@ -56,8 +63,16 @@ public class NewsService {
             case "press" -> newsList = newsRepository.findByPressContaining(keyword);
             default -> System.out.println("type에 올바르지 않은 값이 들어왔습니다.");
         }
-        List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
-        return new NewsListDto(newsDtoList);
+        int totalNewsCount = newsList.size();
+        int totalPages = (int) Math.ceil((double) totalNewsCount / PAGE_SIZE);
+
+        // 현재 페이지에 해당하는 뉴스 목록 추출
+        int startIndex = (page - 1) * PAGE_SIZE;
+        int endIndex = Math.min(startIndex + PAGE_SIZE, totalNewsCount);
+        List<News> pagedNewsList = newsList.subList(startIndex, endIndex);
+
+        List<NewsDto> newsDtoList = pagedNewsList.stream().map(NewsDto::new).toList();
+        return new NewsListDto(newsDtoList, page, totalPages);
     }
     public NewsDetailDto getNewsDetail(Long newsId){
         News news =newsRepository.findById(newsId)
