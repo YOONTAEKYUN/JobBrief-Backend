@@ -1,5 +1,6 @@
 package co.kr.capstonemju.JobBrief.domain.member.service;
 
+import co.kr.capstonemju.JobBrief.domain.member.controller.dto.MemberInfoDto;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
 import co.kr.capstonemju.JobBrief.domain.member.repository.MemberRepository;
 import co.kr.capstonemju.JobBrief.global.exception.AppException;
@@ -23,5 +24,21 @@ public class MemberService {
     public Member findByUserId(String userId) {
         return memberRepository.findByUserId(userId)
                 .orElseThrow(()-> new IllegalArgumentException(""));
+    }
+
+    public MemberInfoDto getInfo(Member member) {
+        MemberInfoDto memberInfoDto = new MemberInfoDto(
+                member.getId(),
+                member.getUserId(),
+                member.getName(),
+                member.getPassword(),
+                member.getPhoneNumber(),
+                member.getEmail()
+        );
+        return memberInfoDto;
+    }
+
+    public void updateInfo(Member member, MemberInfoDto memberInfoDto) {
+
     }
 }
