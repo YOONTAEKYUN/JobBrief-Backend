@@ -38,7 +38,27 @@ public class MemberService {
         return memberInfoDto;
     }
 
-    public void updateInfo(Member member, MemberInfoDto memberInfoDto) {
+    public MemberInfoDto updateInfo(Member member, MemberInfoDto memberInfoDto) {
+        Member updateMember = memberRepository.findByUserId(member.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException(""));
 
+        updateMember.updateMemberInfo(
+                memberInfoDto.getUserId(),
+                memberInfoDto.getName(),
+                memberInfoDto.getPassword(),
+                memberInfoDto.getPhoneNumber(),
+                memberInfoDto.getEmail()
+        );
+
+        memberRepository.save(updateMember);  // 수정된 회원 정보 저장
+
+        return new MemberInfoDto(
+                updateMember.getId(),
+                updateMember.getUserId(),
+                updateMember.getName(),
+                updateMember.getPassword(),
+                updateMember.getPhoneNumber(),
+                updateMember.getEmail()
+        );
     }
 }

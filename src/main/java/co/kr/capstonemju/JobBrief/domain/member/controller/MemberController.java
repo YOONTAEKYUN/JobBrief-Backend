@@ -28,8 +28,8 @@ public class MemberController {
     }
 
     @PostMapping("/info")
-    private void updateInfo(@CurrentUser Member member, @RequestBody MemberInfoDto memberInfoDto){
-        memberService.updateInfo(member, memberInfoDto);
+    private MemberInfoDto updateInfo(@CurrentUser Member member, @RequestBody MemberInfoDto memberInfoDto){
+        return memberService.updateInfo(member, memberInfoDto);
     }
 
 }
