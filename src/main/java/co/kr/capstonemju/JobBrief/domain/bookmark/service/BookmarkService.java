@@ -12,10 +12,10 @@ import co.kr.capstonemju.JobBrief.domain.news.repository.NewsRepository;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,7 +36,7 @@ public class BookmarkService {
             bookmarkRepository.delete(existingBookmark);
         } else {
             // 북마크 추가
-            Bookmark bookmark = new Bookmark(news, member);
+            Bookmark bookmark = new Bookmark(news, member, LocalDateTime.now());
             bookmarkRepository.save(bookmark);
         }
     }
