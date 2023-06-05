@@ -18,13 +18,13 @@ public class BookmarkController {
     @PostMapping("/")
     @PreAuthorize("hasRole('MEMBER')")
     public void addBookmark(@RequestBody BookmarkDto bookmarkDto, @CurrentUser Member member) {
-        bookmarkService.addBookmark(bookmarkDto, member);
+        bookmarkService.clickBookmark(bookmarkDto, member);
     }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('MEMBER')")
-    public NewsListDto getBookmarkList(@CurrentUser Member member){
-        return bookmarkService.getBookmarkList(member);
+    public NewsListDto getBookmarkList(@CurrentUser Member member,@RequestParam(defaultValue = "1") int page){
+        return bookmarkService.getBookmarkList(member, page);
     }
 
 

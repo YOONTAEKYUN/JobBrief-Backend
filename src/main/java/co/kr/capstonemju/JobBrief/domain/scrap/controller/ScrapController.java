@@ -24,8 +24,8 @@ public class ScrapController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('MEMBER')")
-    public NewsListDto getAllScrap(@CurrentUser Member member){
-        return scrapService.getAllScrap(member);
+    public NewsListDto getAllScrap(@CurrentUser Member member, @RequestParam(defaultValue = "1") int page){
+        return scrapService.getAllScrap(member, page);
     }
 
 }

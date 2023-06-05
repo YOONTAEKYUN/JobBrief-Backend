@@ -14,7 +14,7 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query(value = "SELECT * FROM news n ORDER BY n.pub_date DESC", nativeQuery = true)
     List<News> findAllByOrderByPub_dateDesc();
 
-    List<News> findByJob(Job job);
+    Page<News> findByJob(Job job, Pageable pageable);
 
     List<News> findByTitleContaining(String keyword);
 
