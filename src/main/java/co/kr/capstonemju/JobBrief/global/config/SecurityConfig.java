@@ -51,7 +51,8 @@ public class SecurityConfig {
                     API_PREFIX+"/auth/login",
                     API_PREFIX+"/news",
                     API_PREFIX+"/news/search",
-                    API_PREFIX+"/news/{id}"
+                    API_PREFIX+"/news/{id}",
+                    API_PREFIX+"/member/id-check"
             ).permitAll()
             .anyRequest().authenticated()
             .and()
