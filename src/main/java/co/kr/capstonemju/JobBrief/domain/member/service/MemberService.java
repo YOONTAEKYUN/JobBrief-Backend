@@ -1,6 +1,6 @@
 package co.kr.capstonemju.JobBrief.domain.member.service;
 
-import co.kr.capstonemju.JobBrief.domain.member.controller.dto.IdCheckDto;
+import co.kr.capstonemju.JobBrief.domain.member.controller.dto.IdCheckResponseDto;
 import co.kr.capstonemju.JobBrief.domain.member.controller.dto.MemberInfoDto;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
 import co.kr.capstonemju.JobBrief.domain.member.repository.MemberRepository;
@@ -63,8 +63,8 @@ public class MemberService {
         );
     }
 
-    public IdCheckDto idCheck(String userId) {
-        boolean isDuplicated = memberRepository.findByUserId(userId).isEmpty();
-        return new IdCheckDto(isDuplicated);
+    public IdCheckResponseDto idCheck(String userId) {
+        boolean isDuplicated =  memberRepository.findByUserId(userId).isPresent();
+        return new IdCheckResponseDto(isDuplicated);
     }
 }
