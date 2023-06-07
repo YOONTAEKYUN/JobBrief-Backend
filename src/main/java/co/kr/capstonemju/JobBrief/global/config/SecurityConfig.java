@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +30,8 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
 
     private final MemberService memberService;
+    private final CorsConfigurationSource corsConfigurationSource;
+
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -51,6 +54,9 @@ public class SecurityConfig {
                     API_PREFIX+"/news/{id}"
             ).permitAll()
             .anyRequest().authenticated()
+            .and()
+            .cors()
+            .configurationSource(corsConfigurationSource)
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
