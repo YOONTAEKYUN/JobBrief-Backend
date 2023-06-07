@@ -65,6 +65,6 @@ public class MemberService {
 
     public IdCheckDto idCheck(String userId) {
         boolean isDuplicated = memberRepository.findByUserId(userId).isEmpty();
-        return new IdCheckDto(isDuplicated, userId);
+        return new IdCheckDto(isDuplicated);
     }
 }
