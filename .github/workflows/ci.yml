@@ -1,9 +1,9 @@
 name: Java CI with Gradle & Deploy to EC2
 
-# main 브런치에 push가 되면 아래의 flow가 실행됩니다.
+# release 브런치에 push가 되면 아래의 flow가 실행됩니다.
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "release" ]
    
 # flow에서 사용할 변수 같은 느낌입니다.
 env:
