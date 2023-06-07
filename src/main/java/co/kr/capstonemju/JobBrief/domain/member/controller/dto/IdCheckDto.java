@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IdCheckDto {
     private boolean isDuplicated;
-    private String userId;
 
-    public IdCheckDto(boolean isDuplicated, String userId){
+    public IdCheckDto(boolean isDuplicated){
         this.isDuplicated = isDuplicated;
-        this.userId =userId;
     }
 }

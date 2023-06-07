@@ -4,10 +4,17 @@ spring:
   thymeleaf:
     cache: false
   datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/jobbrief?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    username: root
+#    password: root1234
+
+#    RDS 접속 정보
+    url: jdbc:mysql://webservice2.cljvmhzhon78.ap-northeast-2.rds.amazonaws.com:3306/webservice2
+    username: admin
+    password: jobbrief
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/JobBrief?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-    username: root
-    password: root1234
+
 
   jpa:
     generate-ddl: true
@@ -24,6 +31,9 @@ spring:
       host: localhost
       port: 6379
       password: 'jobbrief'
+#    web:
+#      pageable:
+#        one-indexed-parameters: true
 
 
 # Swagger springdoc-ui Configuration
@@ -46,5 +56,5 @@ springdoc:
 jwt:
   token:
     secret: 7JWI64WV7Jik64qY7J2A64Kg7JSo6rCA7KKL64uk64K07J2864+E64Kg7JSo6rCA7KKL7J2E6rmM7KeA6riI7J2A7IOI67K97J207JW864K07J287IOI67K97JeQ64qU642l7KeA7JWK7JWY7Jy866m07KKL6rKg7Ja07KCV66eQ66Gc # 임의의 문자열을 Base64로 인코딩한 값
-    refresh-token-validity-in-seconds: 1209600 # 14일
+#    refresh-token-validity-in-seconds: 1209600 # 14일
     access-token-validity-in-seconds: 43200 # 12시간
