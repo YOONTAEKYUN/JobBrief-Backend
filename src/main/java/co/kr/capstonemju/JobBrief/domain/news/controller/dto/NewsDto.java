@@ -30,6 +30,6 @@ public class NewsDto {
         this.press = news.getPress();
         this.pub_date = news.getPub_date();
         this.summary = news.getSummary();
-        this.job = news.getJob().getJobName();
+        this.job = news.getJob();
     }
 }

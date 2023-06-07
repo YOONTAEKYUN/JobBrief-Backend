@@ -37,8 +37,7 @@ public class News {
     private String summary;
 
     @Column(name = "job",nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Job job;
+    private String job;
 
     @ManyToMany
     @JoinTable(name = "news_keywords",
@@ -47,7 +46,7 @@ public class News {
     private List<Keyword> keywords = new ArrayList<>();
 
     @Builder
-    private News(String title,String reporter, String press, LocalDateTime pub_date, String content, String summary,List<Keyword> keywords ,Job job){
+    private News(String title,String reporter, String press, LocalDateTime pub_date, String content, String summary,List<Keyword> keywords ,String job){
         this.title = title;
         this.reporter = reporter;
         this.press = press;
