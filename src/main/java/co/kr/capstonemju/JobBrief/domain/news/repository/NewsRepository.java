@@ -1,7 +1,7 @@
 package co.kr.capstonemju.JobBrief.domain.news.repository;
 
-import co.kr.capstonemju.JobBrief.domain.news.model.Job;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,11 +11,6 @@ import java.util.List;
 
 
 public interface NewsRepository extends JpaRepository<News, Long> {
-    @Query(value = "SELECT * FROM news n ORDER BY n.pub_date DESC", nativeQuery = true)
-    List<News> findAllByOrderByPub_dateDesc();
-
-    Page<News> findByJob(Job job, Pageable pageable);
-
     List<News> findByTitleContaining(String keyword);
 
     List<News> findByContentContaining(String keyword);
@@ -26,6 +21,11 @@ public interface NewsRepository extends JpaRepository<News, Long> {
 
     @Query(value = "SELECT * FROM news n",
             countQuery = "SELECT count(*) FROM news n", nativeQuery = true)
-    Page<News> findAllByOrderByPub_dateDesc(Pageable pageable);
+    Page<News> findAllByOrderByPubDateDesc(Pageable pageable);
+
+    @Query(value = "SELECT * FROM news n WHERE n.job = :job ORDER BY n.pub_date DESC",
+            countQuery = "SELECT count(*) FROM news n WHERE n.job = :job",
+            nativeQuery = true)
+    Page<News> findByJobOrderByPubDateDesc(@Param("job") String job, Pageable pageable);
 
 }

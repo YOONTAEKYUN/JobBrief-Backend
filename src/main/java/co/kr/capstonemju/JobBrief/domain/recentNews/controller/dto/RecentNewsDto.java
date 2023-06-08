@@ -29,6 +29,6 @@ public class RecentNewsDto {
         this.press = recentNews.getNews().getPress();
         this.pub_date = recentNews.getNews().getPub_date();
         this.summary = recentNews.getNews().getSummary();
-        this.job = recentNews.getNews().getJob().getJobName();
+        this.job = recentNews.getNews().getJob();
     }
 }

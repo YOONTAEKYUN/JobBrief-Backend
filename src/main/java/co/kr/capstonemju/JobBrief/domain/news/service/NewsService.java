@@ -5,7 +5,6 @@ import co.kr.capstonemju.JobBrief.domain.member.model.Role;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDetailDto;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDto;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
-import co.kr.capstonemju.JobBrief.domain.news.model.Job;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import co.kr.capstonemju.JobBrief.domain.recentNews.model.RecentNews;
 import co.kr.capstonemju.JobBrief.domain.news.repository.NewsRepository;
@@ -38,14 +37,14 @@ public class NewsService {
         PageRequest pageRequest = PageRequest.of(page - 1, PAGE_SIZE, Sort.by("pub_date").descending());
         Page<News> newsPage = null;
         switch (job) {
-            case "all"-> newsPage = newsRepository.findAllByOrderByPub_dateDesc(pageRequest);
-            case "production-quality" -> newsPage = newsRepository.findByJob(Job.PRODUCTION_QUALITY, pageRequest);
-            case "it-developer" -> newsPage = newsRepository.findByJob(Job.IT_DEVELOPMENT, pageRequest);
-            case "human-affairs" -> newsPage = newsRepository.findByJob(Job.HUMAN_AFFAIRS, pageRequest);
-            case "finance-accounting" -> newsPage = newsRepository.findByJob(Job.FINANCE_ACCOUNTING, pageRequest);
-            case "strategy-planning" -> newsPage = newsRepository.findByJob(Job.STRATEGY_PLANNING, pageRequest);
-            case "sales-management" -> newsPage = newsRepository.findByJob(Job.SALES_MANAGEMENT, pageRequest);
-            case "marketing-merchandiser" -> newsPage = newsRepository.findByJob(Job.MARKETING_MERCHANDISER, pageRequest);
+            case "all"-> newsPage = newsRepository.findAllByOrderByPubDateDesc(pageRequest);
+            case "production-quality" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("생산관리", pageRequest);
+            case "it-developer" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("IT개발", pageRequest);
+            case "human-affairs" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("인사총무", pageRequest);
+            case "finance-accounting" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("재무회계금융", pageRequest);
+            case "design" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("디자인", pageRequest);
+            case "sales-management" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("영업관리", pageRequest);
+            case "marketing-merchandiser" -> newsPage = newsRepository.findByJobOrderByPubDateDesc("마케팅MD기획", pageRequest);
             default -> System.out.println("올바르지 않은 값이 들어왔습니다");
         }
 
