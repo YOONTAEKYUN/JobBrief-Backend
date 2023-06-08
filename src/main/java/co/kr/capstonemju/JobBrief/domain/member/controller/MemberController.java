@@ -1,7 +1,9 @@
 package co.kr.capstonemju.JobBrief.domain.member.controller;
 
+
 import co.kr.capstonemju.JobBrief.domain.member.controller.dto.IdCheckRequestDto;
 import co.kr.capstonemju.JobBrief.domain.member.controller.dto.IdCheckResponseDto;
+
 import co.kr.capstonemju.JobBrief.domain.member.controller.dto.MemberInfoDto;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
 import co.kr.capstonemju.JobBrief.domain.member.service.MemberService;
@@ -38,7 +40,9 @@ public class MemberController {
     }
 
     @PostMapping("/id-check")
+
     private IdCheckResponseDto idCheck(@RequestBody IdCheckRequestDto idCheckRequestDto){
         return memberService.idCheck(idCheckRequestDto.getUserId());
+
     }
 }
