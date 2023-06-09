@@ -17,11 +17,11 @@ public class Scrap extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "news_id")
+    @JoinColumn(name = "news_id", unique = false)
     private News news;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id",unique = false)
     private Member member;
 
     @Column(name = "opinion")
