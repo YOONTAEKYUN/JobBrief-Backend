@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class RecentNewsDto {
     @NotBlank
     private Long id;
+    private Long newsId;
     @NotBlank
     private String title;
 
@@ -21,14 +22,17 @@ public class RecentNewsDto {
     private String summary;
     @NotBlank
     private String job;
+    private boolean isBookmarked;
 
-    public RecentNewsDto(RecentNews recentNews){
+    public RecentNewsDto(RecentNews recentNews, boolean isBookmarked){
         this.id = recentNews.getId();
+        this.newsId = recentNews.getNews().getId();
         this.title = recentNews.getNews().getTitle();
         this.reporter = recentNews.getNews().getReporter();
         this.press = recentNews.getNews().getPress();
         this.pub_date = recentNews.getNews().getPub_date();
         this.summary = recentNews.getNews().getSummary();
         this.job = recentNews.getNews().getJob();
+        this.isBookmarked = isBookmarked;
     }
 }

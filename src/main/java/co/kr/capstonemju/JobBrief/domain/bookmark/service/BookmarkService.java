@@ -5,12 +5,13 @@ import co.kr.capstonemju.JobBrief.domain.bookmark.controller.dto.BookmarkDto;
 import co.kr.capstonemju.JobBrief.domain.bookmark.model.Bookmark;
 import co.kr.capstonemju.JobBrief.domain.bookmark.repository.BookmarkRepository;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
-import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDto;
-import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
+import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsForMemberDto;
+import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListForMemberDto;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import co.kr.capstonemju.JobBrief.domain.news.repository.NewsRepository;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
@@ -41,13 +42,21 @@ public class BookmarkService {
         }
     }
 
-    public NewsListDto getBookmarkList(Member member, int page) {
+    public NewsListForMemberDto getBookmarkList(Member member, int page) {
         PageRequest pageRequest = PageRequest.of(page - 1, PAGE_SIZE);
-        List<Bookmark> bookmarkList = bookmarkRepository.findByMember(member, pageRequest);
-        List<News> newsList = bookmarkList.stream().map(Bookmark::getNews).toList();
-        List<NewsDto> newsDtoList = newsList.stream().map(NewsDto::new).toList();
+        Page<Bookmark> bookmarkPage = bookmarkRepository.findByMember(member, pageRequest);
+        List<Bookmark> bookmarkList = bookmarkPage.getContent();
+
+        List<NewsForMemberDto> newsForMemberDtoListDtoList = bookmarkList.stream().map(bookmark -> {
+            News news = bookmark.getNews();
+            boolean isBookmarked = true; // 북마크된 항목이므로 true로 설정
+            return new NewsForMemberDto(news, isBookmarked);
+        }).toList();
+
         long totalItems = bookmarkRepository.countByMember(member);
         int totalPages = (int) Math.ceil((double) totalItems / PAGE_SIZE);
-        return new NewsListDto(newsDtoList, page, totalPages);
+
+        return new NewsListForMemberDto(newsForMemberDtoListDtoList, page, totalPages);
     }
+
 }
