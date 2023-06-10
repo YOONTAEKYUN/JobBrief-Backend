@@ -3,6 +3,7 @@ package co.kr.capstonemju.JobBrief.domain.news.repository;
 import co.kr.capstonemju.JobBrief.domain.news.model.News;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +29,7 @@ public interface NewsRepository extends JpaRepository<News, Long> {
             nativeQuery = true)
     Page<News> findByJobOrderByPubDateDesc(@Param("job") String job, Pageable pageable);
 
+    List<News> findByKeywordsKeywordNameContaining(String keyword, PageRequest pageRequest);
+
+    long countByKeywordsKeywordNameContaining(String keyword);
 }
