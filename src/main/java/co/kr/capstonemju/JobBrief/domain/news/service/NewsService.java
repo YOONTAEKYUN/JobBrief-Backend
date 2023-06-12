@@ -1,5 +1,7 @@
 package co.kr.capstonemju.JobBrief.domain.news.service;
 
+import co.kr.capstonemju.JobBrief.domain.bookmark.model.Bookmark;
+import co.kr.capstonemju.JobBrief.domain.bookmark.repository.BookmarkRepository;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
 import co.kr.capstonemju.JobBrief.domain.member.model.Role;
 import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsDetailDto;
@@ -31,6 +33,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final RecentNewsService recentNewsService;
     private final ScrapRepository scrapRepository;
+    private final BookmarkRepository bookmarkRepository;
     private static final int PAGE_SIZE = 10;
 
     public NewsListDto getNewsList(String job, int page) {
@@ -76,7 +79,7 @@ public class NewsService {
     public NewsDetailDto getNewsDetail(Long newsId){
         News news =newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("News Not Found"));
-        return new NewsDetailDto(news, null, false);
+        return new NewsDetailDto(news, null, false, false);
     }
     public NewsDetailDto getNewsDetailForMember(Long newsId, @CurrentUser Member member) {
         boolean isScraped = false;
@@ -92,13 +95,17 @@ public class NewsService {
         NewsDetailDto newsDetailDTO = new NewsDetailDto();
         if(member != null){
             boolean isMember = member.getRole().equals(Role.MEMBER);
-            if (isMember){
+            if (isMember){//회원인 경우
                 Scrap scrap = scrapRepository.findByNewsAndMember(news, member);
-                if (scrap != null) {
+                if (scrap != null) {//회원인 경우 + 해당 뉴스에 대해 스크랩한 경우
                     isScraped = true;
                 }//회원인데 해당 기사에 대해 스크랩이 없는 경우, ""
                 String scrap_opinion = isScraped ? scrap.getOpinion() : "";
-                newsDetailDTO = new NewsDetailDto(news, scrap_opinion, true);
+
+                //회원인 경우 + 해당 뉴스에 대해 북마크 여부
+                Bookmark bookmark = bookmarkRepository.findByNewsAndMember(news, member);
+                boolean isBookmarked = bookmark != null;
+                newsDetailDTO = new NewsDetailDto(news, scrap_opinion, true, isBookmarked);
             }
         }else {
             System.out.println("wrong access!");

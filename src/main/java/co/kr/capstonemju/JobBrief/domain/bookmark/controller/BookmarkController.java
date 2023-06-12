@@ -3,7 +3,7 @@ package co.kr.capstonemju.JobBrief.domain.bookmark.controller;
 import co.kr.capstonemju.JobBrief.domain.bookmark.controller.dto.BookmarkDto;
 import co.kr.capstonemju.JobBrief.domain.bookmark.service.BookmarkService;
 import co.kr.capstonemju.JobBrief.domain.member.model.Member;
-import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListDto;
+import co.kr.capstonemju.JobBrief.domain.news.controller.dto.NewsListForMemberDto;
 import co.kr.capstonemju.JobBrief.global.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +23,7 @@ public class BookmarkController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('MEMBER')")
-    public NewsListDto getBookmarkList(@CurrentUser Member member,@RequestParam(defaultValue = "1") int page){
+    public NewsListForMemberDto getBookmarkList(@CurrentUser Member member, @RequestParam(defaultValue = "1") int page){
         return bookmarkService.getBookmarkList(member, page);
     }
 
