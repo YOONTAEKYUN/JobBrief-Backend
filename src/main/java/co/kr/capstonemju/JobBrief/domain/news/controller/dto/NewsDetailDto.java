@@ -21,9 +21,10 @@ public class NewsDetailDto {
     private String summary;
     private String scrap_opinion;
     private boolean isMember;
+    private boolean isBookmarked;
     private List<KeywordDto> keywords;
 
-    public NewsDetailDto(News news, String scrap_opinion, boolean isMember) {
+    public NewsDetailDto(News news, String scrap_opinion, boolean isMember, boolean isBookmarked) {
         this.id = news.getId();
         this.title = news.getTitle();
         this.press = news.getPress();
@@ -33,6 +34,7 @@ public class NewsDetailDto {
         this.summary = news.getSummary();
         this.scrap_opinion = scrap_opinion;
         this.isMember = isMember;
+        this.isBookmarked = isBookmarked;
         this.keywords = news.getKeywords().stream()
                 .map(keyword -> new KeywordDto(keyword.getKeywordName()))
                 .collect(Collectors.toList());

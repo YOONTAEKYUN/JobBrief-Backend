@@ -67,6 +67,12 @@ jar {
 }
 
 
+bootJar {
+	duplicatesStrategy = 'warn'
+}
+
+
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
